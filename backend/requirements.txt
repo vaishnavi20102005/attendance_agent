@@ -1,0 +1,13 @@
+opencv-python<5
+mediapipe
+numpy
+pandas
+librosa
+soundfile
+sounddevice
+python-dotenv
+deep-sort-realtime
+fastapi
+uvicorn
+python-multipart
+streamlit
