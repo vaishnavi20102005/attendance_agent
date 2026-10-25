@@ -2,7 +2,7 @@ import time
 
 
 class FaceTracker:
-    def __init__(self, max_distance=120, max_missing_seconds=4.0):
+    def __init__(self, max_distance=200, max_missing_seconds=8.0):
         self.max_distance = max_distance
         self.max_missing_seconds = max_missing_seconds
         self.next_id = 1
