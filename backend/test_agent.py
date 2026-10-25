@@ -5,6 +5,8 @@ from core.face_tracker import FaceTracker
 from core.attendance_manager import AttendanceManager
 from core.audio_worker import AudioWorker
 from core.multimodal_agent import MultimodalAgent
+from core.recommendations_engine import RecommendationsEngine
+from core.analytics_service import AnalyticsService
 
 camera = CameraService()
 detector = FaceDetector()
@@ -44,10 +46,17 @@ camera.stop()
 cv2.destroyAllWindows()
 
 if agent.history:
-    scores = [r["score"] for r in agent.history]
-    print("Last result:", agent.history[-1]["score"], agent.history[-1]["level"])
-    for r in agent.history[-1]["reasons"]:
-        print(" -", r)
-    print("Frames analyzed:", len(scores))
-    print("Average score:", round(sum(scores) / len(scores), 1))
-    print("Highest score:", max(scores))
+    engine = RecommendationsEngine()
+    analytics = AnalyticsService()
+
+    print("\n--- Suggestions ---")
+    for rec in engine.generate(agent.history):
+        print(f"[{rec['type']}] {rec['message']}")
+
+    summary = analytics.summarize(agent.history, attendance)
+    print("\n--- Session summary ---")
+    for k, v in summary.items():
+        print(f"{k}: {v}")
+
+    analytics.export_csv(agent.history)
+    print("\nSaved session_report.csv")
